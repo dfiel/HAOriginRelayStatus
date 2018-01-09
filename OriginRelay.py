@@ -1,4 +1,4 @@
-from homeassistant.helpers.entity import Entity
+from homeassistant.components.binary_sensor import BinarySensorDevice
 
 ICON = 'mdi:coin'
 
@@ -8,7 +8,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     add_devices([OriginRelay(sensor_name)])
 
 
-class OriginRelay(Entity):
+class OriginRelay(BinarySensorDevice):
     """Representation of a Sensor."""
 
     def __init__(self, sensor_name):
@@ -16,6 +16,7 @@ class OriginRelay(Entity):
         self._name = sensor_name
         self._state = None
         self._status = None
+        self._sensor_type = 'connectivity'
 
     @property
     def name(self):
@@ -23,14 +24,14 @@ class OriginRelay(Entity):
         return self._name
 
     @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._state
+    def device_class(self):
+        """Return the class of this sensor."""
+        return self._sensor_type
 
     @property
-    def status(self):
+    def is_on(self):
         """Return the state of the sensor."""
-        return self._status
+        return self._state
 
     @property
     def device_state_attributes(self):
